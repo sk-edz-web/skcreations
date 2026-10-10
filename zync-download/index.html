@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zync - Download</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <img id="logo" class="app-logo" alt="App icon"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'%3E%3Crect width='90' height='90' fill='%231a1a1a'/%3E%3C/svg%3E">
+            <div class="app-info">
+                <h1 class="neon-text" id="app-name">ZYNC</h1>
+                <p class="developer" id="app-dev">Made by Skedz</p>
+            </div>
+        </header>
+
+        <a href="#" id="download-btn" class="btn">Download App</a>
+
+        <section class="shots-wrap">
+            <div class="screenshots" id="screenshot-container"></div>
+        </section>
+
+        <section class="description">
+            <h3>About this app</h3>
+            <p id="app-desc">Loading...</p>
+        </section>
+
+        <section class="reviews">
+            <h3>Ratings &amp; reviews</h3>
+            <div class="summary">
+                <div class="avg" id="avg-num">–</div>
+                <div>
+                    <div class="stars-l" id="avg-stars">☆☆☆☆☆</div>
+                    <div class="muted" id="avg-count"></div>
+                </div>
+            </div>
+
+            <div class="review-form">
+                <p class="muted">Rate this app</p>
+                <div class="star-input" id="star-input"></div>
+                <input type="text" id="rev-name" placeholder="Your name (optional)" maxlength="40">
+                <textarea id="rev-text" rows="3" placeholder="Write a review (optional)" maxlength="500"></textarea>
+                <button class="btn" id="review-submit" type="button">Submit review</button>
+            </div>
+
+            <div id="reviews-list"></div>
+        </section>
+    </div>
+
+    <div class="lightbox" id="lightbox"><img id="lightbox-img" alt=""></div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

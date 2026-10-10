@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Zync</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="admin-container" id="login-section">
+        <h2 class="neon-text">Admin access</h2>
+        <input type="text" id="admin-user" placeholder="Username" autocomplete="username">
+        <input type="password" id="admin-pass" placeholder="Password" autocomplete="current-password">
+        <button onclick="login()" class="btn">Login</button>
+    </div>
+
+    <div class="admin-container" id="dashboard-section" style="display:none;">
+        <div class="row-between">
+            <h2 class="neon-text">Dashboard</h2>
+            <button class="btn-small" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="panel">
+            <h4>App details</h4>
+            <div class="icon-row">
+                <img id="icon-preview" class="app-logo" alt="Icon"
+                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'%3E%3Crect width='90' height='90' fill='%231a1a1a'/%3E%3C/svg%3E">
+                <div class="grow">
+                    <input type="file" id="icon-file" accept="image/*">
+                    <button class="btn-small" onclick="uploadIcon()">Upload new icon</button>
+                    <div id="icon-status" class="status"></div>
+                </div>
+            </div>
+            <label>Icon URL (auto-filled after upload)</label>
+            <input type="text" id="a-icon" placeholder="https://...">
+            <label>App name</label>
+            <input type="text" id="a-name" placeholder="ZYNC">
+            <label>Developer name</label>
+            <input type="text" id="a-dev" placeholder="Made by Skedz">
+            <label>Download link</label>
+            <input type="text" id="dl-link" placeholder="App download URL">
+            <label>Description</label>
+            <textarea id="admin-desc" rows="5"></textarea>
+            <button onclick="saveInfo()" class="btn">Save changes</button>
+        </div>
+
+        <div class="panel">
+            <h4>Screenshots</h4>
+            <label>Upload images (select many)</label>
+            <input type="file" id="img-upload" accept="image/*" multiple onchange="previewFiles()">
+            <div id="upload-preview" class="preview-row"></div>
+            <button id="upload-btn" onclick="uploadImage()" class="btn-small">Upload images</button>
+            <div id="upload-status" class="status"></div>
+
+            <label>Or add by direct URL</label>
+            <input type="text" id="img-url-input" placeholder="Paste image URL">
+            <button onclick="addImageUrl()" class="btn-small">Add URL</button>
+
+            <label>Current screenshots</label>
+            <div id="shot-grid" class="shot-grid"></div>
+        </div>
+
+        <div class="panel">
+            <h4>Reviews</h4>
+            <div id="admin-reviews"></div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
