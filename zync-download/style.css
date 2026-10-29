@@ -38,9 +38,9 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"S
 .screenshots img:hover{transform:scale(1.03)}
 
 /* Lightbox Base */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:50;padding:16px}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999;padding:16px}
 .lightbox.open{opacity:1;pointer-events:auto}
-.lightbox img{max-width:100%;max-height:100%;border-radius:10px;transform:scale(.92);transition:transform .3s}
+.lightbox img{max-width:100%;max-height:100%;border-radius:10px;transform:scale(.92);transition:transform .3s; object-fit:contain}
 .lightbox.open img{transform:none}
 
 /* text sections */
@@ -92,20 +92,29 @@ label{display:block;font-size:13px;color:var(--mu);margin-top:6px}
 .toast.err{border-color:#ff6b6b}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* ==== NEW LIGHTBOX CONTROLS ==== */
+/* ==== LIGHTBOX CONTROLS (Mobile Optimized) ==== */
 .close-btn {
     position: absolute;
     top: 20px;
-    right: 25px;
-    font-size: 35px;
+    right: 20px;
+    font-size: 32px;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #fff;
     cursor: pointer;
-    z-index: 60;
-    line-height: 1;
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    z-index: 1000;
+    transition: 0.2s;
 }
 .close-btn:hover {
-    color: var(--cy);
+    background: var(--cy);
+    color: black;
+    border-color: var(--cy);
 }
 .nav-btn {
     position: absolute;
@@ -113,25 +122,33 @@ label{display:block;font-size:13px;color:var(--mu);margin-top:6px}
     transform: translateY(-50%);
     background: rgba(0, 0, 0, 0.5);
     color: white;
-    border: none;
-    font-size: 24px;
-    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    z-index: 60;
-    border-radius: 8px;
+    z-index: 1000;
     transition: 0.3s;
 }
 .nav-btn:hover {
     background: var(--cy);
     color: black;
+    border-color: var(--cy);
 }
-.prev-btn { left: 10px; }
-.next-btn { right: 10px; }
+.prev-btn { left: 15px; }
+.next-btn { right: 15px; }
 /* =============================== */
 
 @media(max-width:480px){
   body{padding:10px}.container,.admin-container{padding:16px}
   .app-logo{width:76px;height:76px;border-radius:17px}.neon-text{font-size:1.6rem}
   .screenshots img{height:240px}
+  /* Mobile-la swipe irukuradhala buttons konjam chinnadha akirlam */
+  .nav-btn { width: 38px; height: 38px; font-size: 16px; }
+  .close-btn { width: 38px; height: 38px; font-size: 28px; top: 15px; right: 15px; }
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
