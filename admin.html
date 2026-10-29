@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Zync Store</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="admin-container narrow" id="login-section">
+        <h2 class="neon-text">Admin access</h2>
+        <input type="text" id="admin-user" placeholder="Username" autocomplete="username">
+        <input type="password" id="admin-pass" placeholder="Password" autocomplete="current-password">
+        <button id="login-btn" class="btn">Login</button>
+    </div>
+
+    <div class="admin-container" id="dashboard-section" hidden>
+        <div class="row-between">
+            <h2 class="neon-text">Dashboard</h2>
+            <div class="row-gap">
+                <a class="btn-small link" href="index.html" target="_blank" rel="noopener">View store</a>
+                <button class="btn-small" id="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <nav class="tabs">
+            <button id="tab-new" data-view="new">Upload app</button>
+            <button id="tab-manage" data-view="manage">Manage apps</button>
+        </nav>
+
+        <section id="manage-view" hidden>
+            <div class="panel" id="migrate-box" hidden>
+                <h4>Old app data found</h4>
+                <p class="muted">Your earlier single-app data (appData/zync) can be moved into the new store with its reviews.</p>
+                <button class="btn-small" id="migrate-btn">Import old app</button>
+            </div>
+            <input type="search" id="manage-search" placeholder="Search your apps" autocomplete="off">
+            <div id="manage-list"></div>
+        </section>
+
+        <section id="editor-view" hidden>
+            <div class="row-between">
+                <h4 class="editor-title" id="editor-title"></h4>
+                <button class="btn-small" id="editor-back" hidden>Back to list</button>
+            </div>
+
+            <div class="panel">
+                <h4>App details</h4>
+                <div class="icon-row">
+                    <img id="icon-preview" class="app-logo" alt="Icon">
+                    <div class="grow">
+                        <label for="f-icon">App icon</label>
+                        <input type="file" id="f-icon" accept="image/*">
+                    </div>
+                </div>
+                <label for="f-name">App name</label>
+                <input type="text" id="f-name" placeholder="ZYNC">
+                <label for="f-dev">Developer name</label>
+                <input type="text" id="f-dev" placeholder="Made by Skedz">
+                <div class="grid-2">
+                    <div>
+                        <label for="f-category">Category</label>
+                        <input type="text" id="f-category" list="category-list" placeholder="Tools">
+                        <datalist id="category-list">
+                            <option value="Tools"><option value="Games"><option value="Social"><option value="Entertainment">
+                            <option value="Productivity"><option value="Education"><option value="Photography"><option value="Music">
+                        </datalist>
+                    </div>
+                    <div>
+                        <label for="f-size">Size</label>
+                        <input type="text" id="f-size" placeholder="24 MB">
+                    </div>
+                </div>
+                <label for="f-link">Download link</label>
+                <input type="text" id="f-link" placeholder="https://...">
+                <label for="f-desc">Description</label>
+                <textarea id="f-desc" rows="5"></textarea>
+            </div>
+
+            <div class="panel">
+                <h4>Version</h4>
+                <label for="f-version">Version number</label>
+                <input type="text" id="f-version" placeholder="1.0.0">
+                <label for="f-new">What's new in this version</label>
+                <textarea id="f-new" rows="3"></textarea>
+            </div>
+
+            <div class="panel">
+                <h4>Screenshots</h4>
+                <label for="f-shots">Add images (select many)</label>
+                <input type="file" id="f-shots" accept="image/*" multiple>
+                <div id="upload-preview" class="preview-row"></div>
+                <label>Current screenshots</label>
+                <div id="shot-grid" class="shot-grid"></div>
+            </div>
+
+            <div class="status" id="save-status"></div>
+            <div class="action-row">
+                <button class="btn" id="save-btn" type="button"></button>
+                <button class="btn alt" id="update-btn" type="button" hidden>Publish update</button>
+            </div>
+
+            <div class="panel" id="reviews-panel" hidden>
+                <h4>Reviews</h4>
+                <div id="admin-reviews"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="common.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

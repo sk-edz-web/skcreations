@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zync Store</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <header class="topbar">
+        <a href="#/" class="brand neon-text">Zync Store</a>
+        <input id="search" type="search" placeholder="Search apps" autocomplete="off">
+    </header>
+
+    <main class="page">
+        <section id="home-view">
+            <div id="app-grid" class="app-grid"></div>
+        </section>
+
+        <section id="detail-view" hidden>
+            <a href="#/" class="back">&#8592; All apps</a>
+            <div id="detail-main"></div>
+
+            <section class="block" id="reviews-block" hidden>
+                <h3>Ratings &amp; reviews</h3>
+                <div class="summary">
+                    <div class="avg" id="avg-num">0.0</div>
+                    <div>
+                        <div class="stars-l" id="avg-stars"></div>
+                        <div class="muted" id="avg-count"></div>
+                    </div>
+                </div>
+                <div class="review-form">
+                    <p class="muted">Rate this app</p>
+                    <div class="star-input" id="star-input"></div>
+                    <input type="text" id="rev-name" placeholder="Your name (optional)" maxlength="40">
+                    <textarea id="rev-text" rows="3" placeholder="Write a review (optional)" maxlength="500"></textarea>
+                    <button class="btn" id="review-submit" type="button">Submit review</button>
+                </div>
+                <div id="reviews-list"></div>
+            </section>
+        </section>
+    </main>
+
+    <div class="lightbox" id="lightbox">
+        <button class="close-btn" id="lb-close" aria-label="Close">&times;</button>
+        <button class="nav-btn prev-btn" id="lb-prev" aria-label="Previous">&#10094;</button>
+        <div class="lb-track" id="lb-track"></div>
+        <button class="nav-btn next-btn" id="lb-next" aria-label="Next">&#10095;</button>
+        <div class="lb-count" id="lb-count"></div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="common.js"></script>
+    <script src="store.js"></script>
+</body>
+</html>
