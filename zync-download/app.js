@@ -67,7 +67,7 @@ function initPublic() {
   setupStars();
   $("review-submit").onclick = submitReview;
 
-  // ==== LIGHTBOX & SWIPE LOGIC ====
+  // ==== LIGHTBOX & SWIPE LOGIC (Mobile Optimized) ====
   $("close-btn").onclick = () => $("lightbox").classList.remove("open");
   $("lightbox").onclick = (e) => {
       if (e.target.id === "lightbox") $("lightbox").classList.remove("open");
@@ -84,18 +84,28 @@ function initPublic() {
 
   let touchstartX = 0;
   let touchendX = 0;
+  const lightboxEl = $("lightbox");
 
-  $("lightbox").addEventListener('touchstart', e => {
+  lightboxEl.addEventListener('touchstart', e => {
       touchstartX = e.changedTouches[0].screenX;
-  });
-  $("lightbox").addEventListener('touchend', e => {
+  }, {passive: true});
+
+  // Prevent background scroll while swiping in lightbox
+  lightboxEl.addEventListener('touchmove', e => {
+      if(lightboxEl.classList.contains("open")) {
+          e.preventDefault(); 
+      }
+  }, {passive: false});
+
+  lightboxEl.addEventListener('touchend', e => {
       touchendX = e.changedTouches[0].screenX;
       handleSwipe();
-  });
+  }, {passive: true});
 
   function handleSwipe() {
-      if (touchendX < touchstartX - 50) $("next-btn").click(); 
-      if (touchendX > touchstartX + 50) $("prev-btn").click(); 
+      const swipeThreshold = 40; // Minimum distance to trigger swipe
+      if (touchendX < touchstartX - swipeThreshold) $("next-btn").click(); 
+      if (touchendX > touchstartX + swipeThreshold) $("prev-btn").click(); 
   }
 }
 
@@ -164,7 +174,6 @@ if ($("login-section")) {
   $("admin-pass").addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
 }
 
-// Global functions for admin HTML elements
 function login() {
   if ($("admin-user").value === "skedz" && $("admin-pass").value === "5023") {
     sessionStorage.setItem("zyncAdmin", "1");
