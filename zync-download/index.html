@@ -33,9 +33,9 @@
         <section class="reviews">
             <h3>Ratings &amp; reviews</h3>
             <div class="summary">
-                <div class="avg" id="avg-num">–</div>
+                <div class="avg" id="avg-num"> </div>
                 <div>
-                    <div class="stars-l" id="avg-stars">☆☆☆☆☆</div>
+                    <div class="stars-l" id="avg-stars"> </div>
                     <div class="muted" id="avg-count"></div>
                 </div>
             </div>
@@ -47,12 +47,17 @@
                 <textarea id="rev-text" rows="3" placeholder="Write a review (optional)" maxlength="500"></textarea>
                 <button class="btn" id="review-submit" type="button">Submit review</button>
             </div>
-
             <div id="reviews-list"></div>
         </section>
     </div>
 
-    <div class="lightbox" id="lightbox"><img id="lightbox-img" alt=""></div>
+    <!-- Modified Lightbox for X button and Navigation -->
+    <div class="lightbox" id="lightbox">
+        <div class="close-btn" id="close-btn">&times;</div>
+        <button class="nav-btn prev-btn" id="prev-btn">&#10094;</button>
+        <img id="lightbox-img" alt="">
+        <button class="nav-btn next-btn" id="next-btn">&#10095;</button>
+    </div>
 
     <script src="api.js"></script>
     <script src="app.js"></script>

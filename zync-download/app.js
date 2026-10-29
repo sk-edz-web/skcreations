@@ -1,7 +1,12 @@
 const appDocRef = db.collection("appData").doc("zync");
 const reviewsRef = appDocRef.collection("reviews");
+
 const $ = (id) => document.getElementById(id);
-const esc = (s) => { const d = document.createElement("div"); d.textContent = s == null ? "" : s; return d.innerHTML; };
+const esc = (s) => {
+  const d = document.createElement("div");
+  d.textContent = s == null ? "" : s;
+  return d.innerHTML;
+};
 const starStr = (n) => "★".repeat(n) + "☆".repeat(5 - n);
 
 function toast(msg, type = "ok") {
@@ -10,11 +15,20 @@ function toast(msg, type = "ok") {
   t.textContent = msg;
   document.body.appendChild(t);
   requestAnimationFrame(() => t.classList.add("show"));
-  setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 400); }, 3000);
+  setTimeout(() => {
+    t.classList.remove("show");
+    setTimeout(() => t.remove(), 400);
+  }, 3000);
 }
 
-/* =================== PUBLIC PAGE =================== */
-if ($("download-btn")) initPublic();
+/* =================== PUBLIC PAGE (Index) =================== */
+let currentShotIndex = 0;
+let shotUrls = [];
+let myRating = 0;
+
+if ($("download-btn")) {
+  initPublic();
+}
 
 function initPublic() {
   appDocRef.onSnapshot((doc) => {
@@ -23,6 +37,7 @@ function initPublic() {
     $("app-dev").textContent = d.dev || "Made by Skedz";
     document.title = (d.name || "Zync") + " - Download";
     if (d.icon) $("logo").src = d.icon;
+    
     const btn = $("download-btn");
     btn.href = d.link || "#";
     btn.classList.toggle("disabled", !d.link);
@@ -43,7 +58,7 @@ function initPublic() {
       list.appendChild(el);
     });
     const n = snap.size;
-    $("avg-num").textContent = n ? (sum / n).toFixed(1) : "–";
+    $("avg-num").textContent = n ? (sum / n).toFixed(1) : "0.0";
     $("avg-stars").textContent = starStr(n ? Math.round(sum / n) : 0);
     $("avg-count").textContent = n ? `${n} rating${n > 1 ? "s" : ""}` : "No ratings yet";
     if (!n) list.innerHTML = '<p class="empty">Be the first to rate this app.</p>';
@@ -51,22 +66,63 @@ function initPublic() {
 
   setupStars();
   $("review-submit").onclick = submitReview;
-  $("lightbox").onclick = () => $("lightbox").classList.remove("open");
+
+  // ==== LIGHTBOX & SWIPE LOGIC ====
+  $("close-btn").onclick = () => $("lightbox").classList.remove("open");
+  $("lightbox").onclick = (e) => {
+      if (e.target.id === "lightbox") $("lightbox").classList.remove("open");
+  };
+
+  $("prev-btn").onclick = () => {
+      currentShotIndex = (currentShotIndex - 1 + shotUrls.length) % shotUrls.length;
+      updateLightboxImage();
+  };
+  $("next-btn").onclick = () => {
+      currentShotIndex = (currentShotIndex + 1) % shotUrls.length;
+      updateLightboxImage();
+  };
+
+  let touchstartX = 0;
+  let touchendX = 0;
+
+  $("lightbox").addEventListener('touchstart', e => {
+      touchstartX = e.changedTouches[0].screenX;
+  });
+  $("lightbox").addEventListener('touchend', e => {
+      touchendX = e.changedTouches[0].screenX;
+      handleSwipe();
+  });
+
+  function handleSwipe() {
+      if (touchendX < touchstartX - 50) $("next-btn").click(); 
+      if (touchendX > touchstartX + 50) $("prev-btn").click(); 
+  }
 }
 
 function renderShots(urls) {
   const box = $("screenshot-container");
   box.innerHTML = "";
   if (!urls.length) { box.innerHTML = '<p class="empty">No screenshots yet.</p>'; return; }
-  urls.forEach((u) => {
+  
+  shotUrls = urls;
+  
+  urls.forEach((u, index) => {
     const img = document.createElement("img");
     img.src = u; img.loading = "lazy"; img.alt = "Screenshot";
-    img.onclick = () => { $("lightbox-img").src = u; $("lightbox").classList.add("open"); };
+    img.onclick = () => { 
+        currentShotIndex = index;
+        updateLightboxImage();
+        $("lightbox").classList.add("open"); 
+    };
     box.appendChild(img);
   });
 }
 
-let myRating = 0;
+function updateLightboxImage() {
+    if(!shotUrls.length) return;
+    $("lightbox-img").src = shotUrls[currentShotIndex];
+}
+
 function setupStars() {
   const box = $("star-input");
   box.innerHTML = [1, 2, 3, 4, 5].map((n) => `<button type="button" data-v="${n}" aria-label="${n} star">★</button>`).join("");
@@ -98,28 +154,36 @@ async function submitReview() {
   btn.disabled = false;
 }
 
+
 /* =================== ADMIN PAGE =================== */
+let currentShots = [];
+let filled = false;
+
 if ($("login-section")) {
   if (sessionStorage.getItem("zyncAdmin")) showDash();
   $("admin-pass").addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
 }
 
+// Global functions for admin HTML elements
 function login() {
   if ($("admin-user").value === "skedz" && $("admin-pass").value === "5023") {
     sessionStorage.setItem("zyncAdmin", "1");
     showDash();
   } else toast("Wrong username or password", "err");
 }
-function logout() { sessionStorage.removeItem("zyncAdmin"); location.reload(); }
 
-let currentShots = [], filled = false;
+function logout() { 
+  sessionStorage.removeItem("zyncAdmin"); 
+  location.reload(); 
+}
+
 function showDash() {
   $("login-section").style.display = "none";
   $("dashboard-section").style.display = "block";
-
+  
   appDocRef.onSnapshot((doc) => {
     const d = doc.exists ? doc.data() : {};
-    if (!filled) { // fill the form once so typing is never overwritten
+    if (!filled) {
       filled = true;
       $("a-name").value = d.name || ""; $("a-dev").value = d.dev || "";
       $("dl-link").value = d.link || ""; $("admin-desc").value = d.desc || "";
@@ -213,6 +277,7 @@ function removeShot(i) {
   appDocRef.update({ screenshots: firebase.firestore.FieldValue.arrayRemove(currentShots[i]) })
     .then(() => toast("Removed")).catch((e) => toast(e.message, "err"));
 }
+
 function deleteReview(id) {
   if (confirm("Delete this review?")) reviewsRef.doc(id).delete().then(() => toast("Review deleted")).catch((e) => toast(e.message, "err"));
 }

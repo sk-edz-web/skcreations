@@ -36,6 +36,8 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"S
 .screenshots img{height:300px;width:auto;border-radius:12px;scroll-snap-align:start;cursor:zoom-in;background:#1a1a1a;
   box-shadow:0 4px 12px rgba(0,0,0,.5);transition:transform .3s;animation:rise .6s ease both}
 .screenshots img:hover{transform:scale(1.03)}
+
+/* Lightbox Base */
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:50;padding:16px}
 .lightbox.open{opacity:1;pointer-events:auto}
 .lightbox img{max-width:100%;max-height:100%;border-radius:10px;transform:scale(.92);transition:transform .3s}
@@ -89,6 +91,43 @@ label{display:block;font-size:13px;color:var(--mu);margin-top:6px}
   padding:11px 18px;border-radius:10px;opacity:0;transition:.35s;z-index:99;max-width:90vw;font-size:14px}
 .toast.err{border-color:#ff6b6b}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ==== NEW LIGHTBOX CONTROLS ==== */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 35px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 60;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+.close-btn:hover {
+    color: var(--cy);
+}
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 60;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+.nav-btn:hover {
+    background: var(--cy);
+    color: black;
+}
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+/* =============================== */
 
 @media(max-width:480px){
   body{padding:10px}.container,.admin-container{padding:16px}
